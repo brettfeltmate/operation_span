@@ -17,6 +17,7 @@
 
     <script src="jspsych.js"></script>
     <script src="plugins/present-image.js"></script>
+    <script src="plugins/present-unsolved-equation.js"></script>
     <script src="utilities.js"></script>
 </head>
 <body>
@@ -31,8 +32,14 @@
         trial_duration: 5500
     }
 
+    var trial2 = {
+        type: 'present-unsolved-equation',
+        expression: '(3 * 4)',
+        add_term: false
+    }
+
     jsPsych.init({
-        timeline: [trial]
+        timeline: [trial, trial2]
     })
 
 </script>
