@@ -18,6 +18,7 @@
     <script src="jspsych.js"></script>
     <script src="plugins/present-image.js"></script>
     <script src="plugins/present-unsolved-equation.js"></script>
+    <script src="plugins/present-solution.js"></script>
     <script src="utilities.js"></script>
 </head>
 <body>
@@ -35,11 +36,24 @@
     var trial2 = {
         type: 'present-unsolved-equation',
         expression: '(3 * 4)',
-        add_term: false
+        add_term: true
+    }
+
+    var trial3 = {
+        type: 'present-solution',
+        equation: function() {
+            return jsPsych.data.get().last(1).values()[0].equation;
+        },
+        evaluation_time: function() {
+            return jsPsych.data.get().last(1).values()[0].rt;
+        }
     }
 
     jsPsych.init({
-        timeline: [trial, trial2]
+        timeline: [trial, trial2, trial3],
+        on_finish: function() {
+            jsPsych.data.displayData();
+        }
     })
 
 </script>

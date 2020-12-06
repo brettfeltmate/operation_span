@@ -139,7 +139,7 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
         var response = { rt: 'timeout' };
 
         // If response made, grab rt
-        function after_response() {
+        var after_response = function() {
             // measure rt
             var end_time = performance.now();
             var rt = end_time - start_time;
@@ -161,7 +161,7 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
             }, trial.trial_duration);
         }
 
-        function end_trial() {
+        var end_trial = function() {
             // ensure button has been disabled
             $('button').attr('disabled', 'disabled');
 
