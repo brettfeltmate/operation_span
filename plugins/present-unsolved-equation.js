@@ -49,19 +49,41 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
         }
     }
 
-    plugin.append_expression = function(expression) {
-        let add_minus = ['+', '-'];
-        let
+    plugin.append_term = function(expression) {
+        // Randomly select second value
+        let second = ranged_random(-9,9);
+        // Append to expression
+        let to_eval = `${expression} + {0}`.format(second);
 
-        let oprtn = add_minus[Math.floor(add_minus.length * Math.random())];
+        // If result <= 0, add 3 to second value.
+        let result = math.evaluate(to_eval);
+        while (result <= 0) {
+            second += 3;
+            to_eval = `${expression} + {0}`.format(second);
+            result = math.evaluate(to_eval);
+        }
 
+        // If final value of second negative, rephrase as subtracting a postive val
+        let add_minus = '+'
+        if (second < 0) { add_minus = '-' }
 
+        // return full-form expression
+        return `${expression} {0} {1}`.format(add_minus, Math.abs(second))
     }
 
 
     plugin.trial = function(display_element, trial) {
 
-        plugin.equation = trial.expression;
+        plugin.expression = trial.expression;
+
+        let full_form = plugin.expression;
+
+        if (trial.add_term) {
+            full_form = plugin.append_term(full_form)
+        }
+
+        plugin.full_form = full_form;
+        plugin.true_answer = math.evaluate(plugin.full_form);
 
 
         // data saving
