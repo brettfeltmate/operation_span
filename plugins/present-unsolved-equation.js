@@ -80,7 +80,7 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
 
         if (trial.add_term) {
             full_form = plugin.append_term(full_form)
-        }
+        };
 
         plugin.full_form = full_form;
         plugin.true_answer = math.evaluate(plugin.full_form);
