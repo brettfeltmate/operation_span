@@ -57,7 +57,7 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
 
         // If result <= 0, add 3 to second value.
         let result = math.evaluate(to_eval);
-        while (result <= 0) {
+        while (result <= 0 && second != 0) {
             second += 3;
             to_eval = `${expression} + {0}`.format(second);
             result = math.evaluate(to_eval);
@@ -77,18 +77,6 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
         // Event styles
         $('head').append(
             $('<style />'). attr('id', 'present-unsolved-equation-styles').html(
-                `body {\n` +
-                `\tbackground-color: rgb(45,45,48);\n` +
-                `\tfont-family: sans-serif;\n` +
-                `\tcolor: white;\n` +
-                `\tfont-size: 20pt;\n`+
-                `}\n\n` +
-                `.wrapper {\n` +
-                `\tposition: fixed;\n` +
-                `\ttop: 50%;\n` +
-                `\tleft: 50%;\n` +
-                `\ttransform: translate(-50%, -50%);\n` +
-                `}\n\n` +
                 `.grid {\n` +
                 `\tdisplay: grid;\n` +
                 `\tgrid-template-columns: 50vw;\n` +
@@ -117,15 +105,17 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
             full_form = plugin.append_term(full_form)
         }
 
+        to_present = full_form;
+        to_present = to_present.replace('*', 'x').replace('/', '÷') + ' = ?'
+
         // Generate event html
         var event_html =
-            `<div class = "wrapper">` +
-            `<div class = 'grid'>` +
-            `<div class = "row">${trial.prompt}</div>` +
-            `<div class = 'row' style = 'font-size: 30pt'>${full_form}</div>` +
-            `<div class = 'row'><button class = 'button'>${trial.button_label}</button></div>` +
-            `<div class = 'row'></div>` +
-            `</div></div>`
+            `<div class = 'grid dev-lines'>` +
+            `<div class = "row dev-lines">${trial.prompt}</div>` +
+            `<div class = 'row dev-lines' style = 'font-size: 30pt'>${to_present}</div>` +
+            `<div class = 'row dev-lines'><button class = 'button'>${trial.button_label}</button></div>` +
+            `<div class = 'row dev-lines'></div>` +
+            `</div>`
 
         display_element.innerHTML = event_html;
 

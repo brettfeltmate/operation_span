@@ -69,32 +69,8 @@ jsPsych.plugins["present-recall-screen"] = (function() {
 
         $('head').append(
             $('<style />').attr('id', 'present-recall-screen-styles').html(
-                `body {\n` +
-                `\tbackground-color: rgb(45,45,48);\n` +
-                `\tfont-family: sans-serif;\n` +
-                `\tcolor: white;\n` +
-                `\tfont-size: 20pt;\n`+
-                `}\n\n` +
-                `.wrapper {\n` +
-                `\tposition: fixed;\n` +
-                `\ttop: 50%;\n` +
-                `\tleft: 50%;\n` +
-                `\ttransform: translate(-50%, -50%);\n` +
-                `}\n\n` +
-                `.recall-item {\m` +
-                `\twidth: 0.5vw;\n` +
-                `\theight: 0.5vh;\n` +
-                `\tbackground-repeat: no-repeat;\n` +
-                `\tbackground-position: center;\n` +
-                `\tbackground-size: 0.5vh 0.5vw;\n` +
-                `\tdisplay: inline-block;\n` +
-                `\tbox-sizing: border-box;\n` +
-                `}\n\n` +
-                `.recall-item:last-of-type {\n` +
-                `\tmargin-right: 0;\n` +
-                `}\n\n` +
-                `.recall-item.selected {\n` +
-                `\tborder: 5px solid red;\n` +
+                `.container {\n` +
+                `\tborder`
 
             )
         )

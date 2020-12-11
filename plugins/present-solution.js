@@ -75,18 +75,6 @@ jsPsych.plugins["present-solution"] = (function() {
         // Event styles
         $('head').append(
             $('<style />'). attr('id', 'present-solution-styles').html(
-                `body {\n` +
-                `\tbackground-color: rgb(45,45,48);\n` +
-                `\tfont-family: sans-serif;\n` +
-                `\tcolor: white;\n` +
-                `\tfont-size: 20pt;\n`+
-                `}\n\n` +
-                `.wrapper {\n` +
-                `\tposition: fixed;\n` +
-                `\ttop: 50%;\n` +
-                `\tleft: 50%;\n` +
-                `\ttransform: translate(-50%, -50%);\n` +
-                `}\n\n` +
                 `.grid {\n` +
                 `\tdisplay: grid;\n` +
                 `\tgrid-template-columns: 50vw;\n` +
@@ -118,7 +106,6 @@ jsPsych.plugins["present-solution"] = (function() {
 
         // Event HTML
         var event_html =
-            `<div class = 'wrapper'>` +
             `<div class = 'grid'>` +
             `<div class = 'row'>${trial.prompt}</div>` +
             `<div class = 'row' style = 'font-size: 30pt'>${solution_presented}</div>` +
@@ -127,7 +114,7 @@ jsPsych.plugins["present-solution"] = (function() {
             `<div class = 'divider'></div>` +
             `<button class = 'button'>${trial.button_labels[1]}</button></div>` +
             `<div class = 'row'></div>` +
-            `</div></div>`
+            `</div>`
 
         display_element.innerHTML = event_html;
 

@@ -75,15 +75,6 @@ jsPsych.plugins['present-image'] = (function() {
 
         $('head').append(
             $('<style />').attr('id', 'present-image-styles').html(
-                `body {\n` +
-                `\tbackground-color: rgb(45,45,48);\n` +
-                `}\n\n` +
-                `.wrapper {\n` +
-                `\tposition: fixed;\n` +
-                `\ttop: 50%;\n` +
-                `\tleft: 50%;\n` +
-                `\ttransform: translate(-50%, -50%);\n` +
-                `}\n\n` +
                 `.grid {\n` +
                 `\tdisplay: grid;\n` +
                 `\tgrid-template-columns: ${scaled_width}vw;\n` +
@@ -103,12 +94,11 @@ jsPsych.plugins['present-image'] = (function() {
         )
 
         event_html =
-            `<div class = "wrapper">` +
             `<div class = 'grid'>` +
             `<div class = 'row'></div>` +
             `<div class = 'row'><img src=${trial.image} alt = "image at ${trial.image} cannot be found"></div>` +
             `<div class = 'row'></div>` +
-            `</div></div>`
+            `</div>`
 
         display_element.innerHTML = event_html;
 

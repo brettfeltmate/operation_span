@@ -43,13 +43,6 @@ function ranged_random(min, max) {
 }
 
 /**
- * @desc Returns sum of a + b
- * @param a first operand
- * @param b second operand
- */
-const sum = (a, b) => a + b;
-
-/**
  * @desc Given length of some array, returns dimensions of grid of best fit.
  * @param n length of array to be arranged in grid
  */
