@@ -29,6 +29,7 @@ jsPsych.plugins['present-image'] = (function() {
                 default: null,
                 description: 'An optional index value denoting images serial presentation position.'
             },
+
             image_duration: {
                 type: jsPsych.plugins.parameterType.INT,
                 pretty_name: "image duration",
@@ -55,8 +56,9 @@ jsPsych.plugins['present-image'] = (function() {
         event_display =
             `<div class = 'operation-span-content-wrapper'>` +
             `<div class = 'operation-span-content-layout'>` +
-            `<div class = 'operation-span-stimulus-display'>` +
-            `<div class = 'operation-span-content-box' style="background-image: url('${trial.image}')"></div>` +
+            `<div class = 'text-stimulus' style = 'grid-area: prompt'>REMEMBER</div>` +
+            `<div class = 'operation-span-single-stimulus image-stimulus' style="background-image: url('${trial.image}')">` +
+            //`<div class = 'operation-span-content-box' style="background-image: url('${trial.image}')"></div>` +
             `</div></div></div>`
 
         display_element.innerHTML = event_display;
@@ -73,8 +75,6 @@ jsPsych.plugins['present-image'] = (function() {
                 "image_name": trial.image.substring(trial.image.lastIndexOf('/') + 1),
                 "image_index": trial.index
             };
-
-            pr([trial_data.image, trial_data.index])
 
             // clear the display
             display_element.innerHTML = '';
@@ -93,7 +93,6 @@ jsPsych.plugins['present-image'] = (function() {
         // end trial if time limit is set
         if (trial.trial_duration !== null) {
             jsPsych.pluginAPI.setTimeout(function() {
-                die()
                 end_trial();
             }, trial.trial_duration);
         } else {

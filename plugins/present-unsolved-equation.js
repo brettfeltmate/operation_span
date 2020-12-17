@@ -32,7 +32,7 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
             prompt: {
               type: jsPsych.plugins.parameterType.STRING,
               pretty_name: "Prompt message",
-              default: `What is the solution?<br>Press 'continue' when you believe you know.`,
+              default: null,
               description: "Any content here will be displayed above the presented expression."
             },
             trial_duration: {
@@ -51,74 +51,48 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
     }
 
     plugin.append_term = function(expression) {
-        // Randomly select second value
-        let second = ranged_random(-9,9);
-        // Append to expression
-        let to_eval = `${expression} + {0}`.format(second);
+        // Randomly select operand to be applied
+        let operand = ranged_random(-9, 9);
 
-        // If result <= 0, add 3 to second value.
-        let result = math.evaluate(to_eval);
-        while (result <= 0 && second != 0) {
-            second += 3;
-            to_eval = `${expression} + {0}`.format(second);
-            result = math.evaluate(to_eval);
+
+        // If result <= 0, add 3 to operand.
+        let result = math.evaluate(`${expression} + ${operand}`);
+
+        while (result <= 0 || operand == 0) {
+            operand += 3;
+            result = math.evaluate(`${expression} + ${operand}`)
         }
 
-        // If final value of second negative, rephrase as subtracting a postive val
-        let add_minus = '+'
-        if (second < 0) { add_minus = '-' }
+        // minus if operand negative, plus if positive
+        let operation = (operand < 0) ? '-' : '+';
 
-        // return full-form expression
-        return `${expression} {0} {1}`.format(add_minus, Math.abs(second))
+        // Return finished expression
+        return `${expression} {0} {1}`.format(operation, Math.abs(operand))
     }
 
 
     plugin.trial = function(display_element, trial) {
 
-        // Event styles
-        $('head').append(
-            $('<style />'). attr('id', 'present-unsolved-equation-styles').html(
-                `.grid {\n` +
-                `\tdisplay: grid;\n` +
-                `\tgrid-template-columns: 50vw;\n` +
-                `\tgrid-template-rows: 30vh 30vh 15vh 15vh;\n` +
-                `}\n\n` +
-                `.row {\n` +
-                `\tdisplay: flex;\n` +
-                `\tjustify-content: center;\n` +
-                `\talign-items: center;\n` +
-                `\ttext-align: center;\n` +
-                `}\n\n` +
-                `.button {\n` +
-                `\tdisplay: inline-block;\n` +
-                `\tpadding: 10px;\n` +
-                `\ttop: 50%;\n` +
-                `\tleft: 50%;\n` +
-                `\tfont-size: 20pt;\n` +
-                `}`
-            )
-        )
+
+        let prompt = (trial.prompt !== null) ? trial.prompt : `Press ${trial.button_label} when you know the answer`
 
         // Grab expression, and extend if requested
-        let full_form = trial.expression;
+        let to_present = (trial.add_term) ? plugin.append_term(trial.expression) : trial.expression
 
-        if (trial.add_term) {
-            full_form = plugin.append_term(full_form)
-        }
-
-        to_present = full_form;
         to_present = to_present.replace('*', 'x').replace('/', '÷') + ' = ?'
 
-        // Generate event html
-        var event_html =
-            `<div class = 'grid dev-lines'>` +
-            `<div class = "row dev-lines">${trial.prompt}</div>` +
-            `<div class = 'row dev-lines' style = 'font-size: 30pt'>${to_present}</div>` +
-            `<div class = 'row dev-lines'><button class = 'button'>${trial.button_label}</button></div>` +
-            `<div class = 'row dev-lines'></div>` +
-            `</div>`
+        event_display =
+            `<div class = 'operation-span-content-wrapper'>` +
+            `<div class = 'operation-span-content-layout'>` +
+            `<div class = 'text-stimulus' style = 'grid-area: prompt'>${prompt}</div>` +
+            `<div class = 'operation-span-single-stimulus text-stimulus'>${to_present}</div>` +
+            `<div class = 'operation-span-button-bank'>` +
+            `<button class = 'operation-span-button'>${trial.button_label}</button>` +
+            `</div></div></div>`
 
-        display_element.innerHTML = event_html;
+
+
+        display_element.innerHTML = event_display;
 
         // Start the clock
         var start_time = performance.now();
