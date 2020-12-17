@@ -66,20 +66,21 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
         // minus if operand negative, plus if positive
         let operation = (operand < 0) ? '-' : '+';
 
-        // Return finished expression
+        // Make operand absolute in value, return final expression
         return `${expression} {0} {1}`.format(operation, Math.abs(operand))
     }
 
 
     plugin.trial = function(display_element, trial) {
 
-
+        // Grab prompt if supplied
         let prompt = (trial.prompt !== null) ? trial.prompt : `Press ${trial.button_label} when you know the answer`
 
         // Grab expression, and extend if requested
-        let to_present = (trial.add_term) ? plugin.append_term(trial.expression) : trial.expression
+        let expression = (trial.add_term) ? plugin.append_term(trial.expression) : trial.expression
 
-        to_present = to_present.replace('*', 'x').replace('/', '÷') + ' = ?'
+        // Replace operands w/ conventional forms
+        to_present = expression.replace('*', 'x').replace('/', '÷') + ' = ?'
 
         event_display =
             `<div class = 'operation-span-content-wrapper'>` +
@@ -135,7 +136,7 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
 
             var trial_data = {
                 "rt": response.rt,
-                "equation": full_form
+                "equation": expression
             }
 
             // Remove event styles

@@ -32,7 +32,7 @@ jsPsych.plugins["present-solution"] = (function() {
             prompt: {
               type: jsPsych.plugins.parameterType.STRING,
               pretty_name: "Prompt",
-              default: "Is this the correct answer?",
+              default: null,
               description: "Any content here will be displayed over presented solution."
             },
             trial_duration: {
@@ -72,51 +72,25 @@ jsPsych.plugins["present-solution"] = (function() {
 
 
     plugin.trial = function(display_element, trial) {
-        // Event styles
-        $('head').append(
-            $('<style />'). attr('id', 'present-solution-styles').html(
-                `.grid {\n` +
-                `\tdisplay: grid;\n` +
-                `\tgrid-template-columns: 50vw;\n` +
-                `\tgrid-template-rows: 30vh 30vh 15vh 15vh;\n` +
-                `}\n\n` +
-                `.row {\n` +
-                `\tdisplay: flex;\n` +
-                `\tjustify-content: center;\n` +
-                `\talign-items: center;\n` +
-                `\ttext-align: center;\n` +
-                `}\n\n` +
-                `.button {\n` +
-                `\tdisplay: inline-block;\n` +
-                `\tpadding: 10pt;\n` +
-                `\ttop: 50%;\n` +
-                `\tleft: 50%;\n` +
-                `\tfont-size: 20pt;\n` +
-                `}\n\n` +
-                `.divider {\n` +
-                `\twidth: 10pt;\n` +
-                `\theight: auto;\n` +
-                `\tdisplay: inline-block;\n` +
-                `}`
-            )
-        )
+
+        let prompt = (trial.prompt !== null) ? trial.prompt : "Is this the correct answer?"
 
         var solution_valid = randomChoice([true, false]); // TODO: The plugin should not decide this.
-        var solution_presented = plugin.get_solution(trial.equation, solution_valid);
+        var proposed_solution = plugin.get_solution(trial.equation, solution_valid);
 
-        // Event HTML
-        var event_html =
-            `<div class = 'grid'>` +
-            `<div class = 'row'>${trial.prompt}</div>` +
-            `<div class = 'row' style = 'font-size: 30pt'>${solution_presented}</div>` +
-            `<div class = 'row'>` +
-            `<button class = 'button'>${trial.button_labels[0]}</button>` +
-            `<div class = 'divider'></div>` +
-            `<button class = 'button'>${trial.button_labels[1]}</button></div>` +
-            `<div class = 'row'></div>` +
-            `</div>`
+        event_display =
+            `<div class = 'operation-span-content-wrapper'>` +
+            `<div class = 'operation-span-content-layout'>` +
+            `<div class = 'text-stimulus' style = 'grid-area: prompt'>${prompt}</div>` +
+            `<div class = 'operation-span-single-stimulus text-stimulus'>${proposed_solution}</div>` +
+            `<div class = 'operation-span-button-bank'>` +
+            `<button class = 'operation-span-button'>${trial.button_labels[0]}</button>` +
+            `<button class = 'operation-span-button'>${trial.button_labels[1]}</button>` +
+            `</div></div></div>`
 
-        display_element.innerHTML = event_html;
+
+
+        display_element.innerHTML = event_display;
 
         // Start the clock
         var start_time = performance.now();
@@ -182,11 +156,13 @@ jsPsych.plugins["present-solution"] = (function() {
             var trial_data = {
                 "rt": response.rt,
                 "solve_time": response.solve_time,
-                "solution_presented": solution_presented,
+                "solution_presented": proposed_solution,
                 "solution_correct": solution_valid,
                 "response": response.choice,
                 "accuracy": response.accuracy
             }
+
+            pr(trial_data)
 
             // Remove event styles
             $('present-solution-styles').remove();
