@@ -1,0 +1,121 @@
+$grue: rgb(90,90,96);
+$gray: rgb(223, 223, 220);
+$offset: 5px;
+
+body {
+  background-color: $grue;
+  font-size: 20pt;
+  color: $gray;
+  font-family: sans-serif;
+}
+
+.operation-span-content-wrapper {
+  display: grid;
+  height: 75vh;
+  width: 75vw;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  justify-content: center;
+  align-content: center;
+}
+
+.operation-span-content-layout {
+  display: grid;
+  height: inherit;
+  width: inherit;
+  grid-template-columns: 1fr;
+  grid-template-rows: 2fr 6fr 2fr 1fr;
+  grid-template-areas:
+          "prompt"
+          "stimulus-display"
+          "answer-bank"
+          "button-bank";
+  place-items: center;
+
+}
+
+.operation-span-stimulus-display {
+  grid-area: stimulus-display;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  place-items: center;
+  border-top: 5px solid $gray;
+  border-bottom: 5px solid $gray;
+  height: 100%;
+  width: 100%
+}
+
+.operation-span-recall-display {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  justify-content: center;
+  align-content: center;
+}
+
+.operation-span-content-box {
+  box-sizing: border-box;
+  height: 95%;
+  width: 100%;
+  text-align: center;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.operation-span-recall-bank {
+  display: grid;
+  grid-area: answer-bank;
+  place-content: space-evenly;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: 1fr;
+}
+
+.operation-span-button-bank {
+  display: flex;
+  grid-area: button-bank;
+  place-content: space-evenly;
+  margin: $offset;
+}
+
+.operation-span-button {
+  place-self: center;
+  background-color: $gray;
+  border-radius: 12pt;
+  width: 25%;
+  height: 90%;
+  color: $grue;
+}
+.operation-span-button:hover {
+  background-color: $grue;
+  color: $gray;
+}
+
+.operation-span-overlay-text {
+  color: $grue;
+  -webkit-text-fill-color: $gray;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: $grue;
+}
+
+.dev-lines {
+  border: 1px solid red;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

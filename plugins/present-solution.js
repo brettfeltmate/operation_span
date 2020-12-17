@@ -101,7 +101,7 @@ jsPsych.plugins["present-solution"] = (function() {
             )
         )
 
-        var solution_valid = randomChoice([true, false]);
+        var solution_valid = randomChoice([true, false]); // TODO: The plugin should not decide this.
         var solution_presented = plugin.get_solution(trial.equation, solution_valid);
 
         // Event HTML

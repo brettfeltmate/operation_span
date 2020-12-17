@@ -2,6 +2,7 @@
  * Example plugin template
  */
 
+// TODO: stop button label overflow
 jsPsych.plugins["present-unsolved-equation"] = (function() {
 
     var plugin = {};
