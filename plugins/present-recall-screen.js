@@ -59,7 +59,7 @@ jsPsych.plugins["present-recall-screen"] = (function() {
 
 
             content.push($('<div />').addClass('operation-span-array-item-index text-stim'))
-            content.push($('<div />').addClass('operation-span-array-item-image image-stim').css('background-image', `url('${image_array[i]}')`))
+            content.push($('<div />').addClass('operation-span-array-item-image image-stim').css('background-image', `url('${image_array[i]}')`).data("index", i))
 
             $(cell).append(content)
             array_items.push(cell)
@@ -71,19 +71,38 @@ jsPsych.plugins["present-recall-screen"] = (function() {
     plugin.click_handler = function(e) {
         e.stopPropagation();
 
-        pr('clicked');
-        // $(this).closest('operation-span-array-item-index').append(num);
-        // num += 1;
+        $(this).children('.text-stim').text(`${plugin.num}`);
+
+        img_index = $(this).children('.image-stim').data('index')
+
+        img_choice = $('<div />').addClass('operation-span-recall-item').css('background-image', `url('${plugin.image_array[img_index]}')`)
+
+        $('.operation-span-recall-bank').append(img_choice)
+        plugin.num += 1;
+
+    }
+
+    plugin.clear_choices = function(e) {
+        e.stopPropagation()
+        plugin.num = 1;
+        $('.operation-span-array-item-index').empty()
+        $('.operation-span-recall-bank').empty()
+    }
+
+    plugin.skip_choice = function(e) {
+        e.stopPropagation()
+        plugin.num += 1;
+        blank_cell = $('<div />').addClass('operation-span-recall-item')
+
+        $('.operation-span-recall-bank').append(blank_cell)
 
     }
 
 
-
     plugin.trial = function(display_element, trial) {
+        plugin.num = 1;
+        plugin.image_array = array_shuffle(trial.image_array)
 
-        var prompt =
-            `Which images do you recall seeing?<br>` +
-            `Using your mouse, check the box beside each image you recall, in the order they were presented.<br>`
 
         var button_instrux =
             `Press <b>CLEAR</b> to clear your choices if you make a mistake.<br>` +
@@ -91,21 +110,41 @@ jsPsych.plugins["present-recall-screen"] = (function() {
             `Press <b>FINISH</b> when you are done making your selections.`
 
 
+        //let prompt = $('<div />').addClass('text-stim').css('grid-area', 'prompt').text(`${trial.prompt}`);
+
+        let prompt = $('<div />').addClass('text-stim').css('grid-area', 'prompt').text(
+            `Which images do you recall seeing?`
+            )
+
         let trial_array = plugin.spawn_array(trial.image_array)
+        let recall_bank = $('<div />').addClass('operation-span-recall-bank')
+        let button_bank = $('<div />').addClass('operation-span-button-bank')
 
-        $(display_element).append(
-            $('<div />').addClass('operation-span-layout').append(trial_array)
-        )
+        let clear_choices = $('<button />').attr('id', 'clear_choices').addClass('operation-span-button').text('CLEAR ALL')
+        let skip_choice = $('<button />').attr('id', 'skip_choice').addClass('operation-span-button').text('SKIP NEXT')
+        let submit_choices = $('<button />').attr('id', 'submit_choices').addClass('operation-span-button').text('SUBMIT')
+
+        $(button_bank).append([clear_choices, skip_choice, submit_choices])
 
 
-        var num = 1;
+        let container = $('<div />').addClass('operation-span-layout').append([prompt, trial_array, recall_bank, button_bank])
+
+
+
+        $(container).on('click', '.operation-span-array-item', plugin.click_handler)
+        $(container).on('click', '#clear_choices', plugin.clear_choices)
+        $(container).on('click', '#skip_choice', plugin.skip_choice)
+
+        $(display_element).append(container)
+
+
+
         //$(event_display).on('click', '.operation-span-array-item-image image-stim', plugin.click_handler);
 
 
         //pr(event_display.html());
 
         //display_element.innerHTML = event_display;
-        die()
 
 
 

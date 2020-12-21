@@ -21,7 +21,7 @@ body {
           "answer-bank"
           "button-bank";
   place-items: center;
-  grid-row-gap: 2vh;
+  grid-row-gap: 5vh;
 
 }
 
@@ -35,7 +35,7 @@ body {
   border-bottom: 5px solid $gray;
   padding-bottom: 10px;
   height: 100%;
-  width: 100%;
+  width: 70%;
 }
 
 .operation-span-stim-array {
@@ -44,11 +44,12 @@ body {
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr);
   grid-row-gap: 2vh;
+  grid-column-gap: 2vw;
   place-items: center;
   border-top: 5px solid $gray;
   border-bottom: 5px solid $gray;
   padding-bottom: 10px;
-  width: 100%;
+  width: 70%;
   height: 100%;
 
 }
@@ -65,6 +66,9 @@ body {
 }
 
 .operation-span-array-item-index {
+  display: grid;
+  align-items: center;
+  justify-items: right;
   grid-area: index;
   width: 100%;
   height: 100%;
@@ -92,8 +96,19 @@ body {
   display: grid;
   grid-area: answer-bank;
   place-content: space-evenly;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(12, 1fr);
+  grid-column-gap: 2vw;
   grid-auto-rows: 1fr;
+  height: 100%;
+  width: 70%;
+}
+
+.operation-span-recall-item {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .operation-span-button-bank {

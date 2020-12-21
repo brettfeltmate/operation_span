@@ -86,9 +86,9 @@ jsPsych.plugins["present-solution"] = (function() {
             )
         }
 
-        $(display_element).append(
-            $('<div />').addClass('operation-span-layout').append([prompt, stim, buttons])
-        )
+        let container = $('<div />').addClass('operation-span-layout').append([prompt, stim, buttons])
+
+        $(display_element).append(container)
 
         // Start the clock
         var start_time = performance.now();

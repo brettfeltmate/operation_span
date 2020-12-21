@@ -61,9 +61,9 @@ jsPsych.plugins['present-image'] = (function() {
         let prompt = $('<div />').addClass('text-stim').css('grid-area', 'prompt').text(`${trial.prompt}`)
         let stim = $('<div />').addClass('operation-span-single-stim image-stim').css('background-image', `url('${trial.image}')`)
 
-        $(display_element).append(
-            $('<div />').addClass('operation-span-layout').append([prompt, stim])
-        )
+        let container = $('<div />').addClass('operation-span-layout').append([prompt, stim])
+
+        $(display_element).append(container)
         //
         // event_display =
         //     `<div class = 'operation-span-layout'>` +
