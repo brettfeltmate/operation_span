@@ -32,7 +32,7 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
             prompt: {
               type: jsPsych.plugins.parameterType.STRING,
               pretty_name: "Prompt message",
-              default: null,
+              default: "",
               description: "Any content here will be displayed above the presented expression."
             },
             trial_duration: {
@@ -73,27 +73,22 @@ jsPsych.plugins["present-unsolved-equation"] = (function() {
 
     plugin.trial = function(display_element, trial) {
 
-        // Grab prompt if supplied
-        let prompt = (trial.prompt !== null) ? trial.prompt : `Press ${trial.button_label} when you know the answer`
-
         // Grab expression, and extend if requested
         let expression = (trial.add_term) ? plugin.append_term(trial.expression) : trial.expression
 
         // Replace operands w/ conventional forms
-        to_present = expression.replace('*', 'x').replace('/', '÷') + ' = ?'
+        let to_present = expression.replace('*', 'x').replace('/', '÷') + ' = ?'
 
-        event_display =
-            `<div class = 'operation-span-content-wrapper'>` +
-            `<div class = 'operation-span-content-layout'>` +
-            `<div class = 'text-stimulus' style = 'grid-area: prompt'>${prompt}</div>` +
-            `<div class = 'operation-span-single-stimulus text-stimulus'>${to_present}</div>` +
-            `<div class = 'operation-span-button-bank'>` +
-            `<button class = 'operation-span-button'>${trial.button_label}</button>` +
-            `</div></div></div>`
+        let prompt = $('<div />').addClass('text-stim').css('grid-area', 'prompt').text(`${trial.prompt}`)
+        let stim = $('<div />').addClass('operation-span-single-stim text-stim').text(`${to_present}`)
+        let buttons =
+            $('<div />').addClass('operation-span-button-bank').append(
+                $('<button />').addClass('operation-span-button').text(`${trial.button_label}`)
+            )
 
-
-
-        display_element.innerHTML = event_display;
+        $(display_element).append(
+            $('<div />').addClass('operation-span-layout').append([prompt, stim, buttons])
+        )
 
         // Start the clock
         var start_time = performance.now();

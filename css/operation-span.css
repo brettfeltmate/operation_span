@@ -5,22 +5,10 @@ body {
   font-family: sans-serif;
 }
 
-.operation-span-content-wrapper {
+.operation-span-layout {
   display: grid;
   height: 95vh;
   width: 90vw;
-  grid-template-areas: "content-wrapper";
-  grid-template-columns: auto;
-  grid-template-rows: auto;
-  justify-content: center;
-  align-content: center;
-}
-
-.operation-span-content-layout {
-  display: grid;
-  height: inherit;
-  width: inherit;
-  grid-area: content-wrapper;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 4fr 1fr 1fr;
   grid-template-areas: "prompt" "stimulus-display" "answer-bank" "button-bank";
@@ -28,7 +16,7 @@ body {
   grid-row-gap: 2vh;
 }
 
-.operation-span-single-stimulus {
+.operation-span-single-stim {
   grid-area: stimulus-display;
   display: grid;
   grid-template-columns: 1fr;
@@ -36,30 +24,58 @@ body {
   place-items: center;
   border-top: 5px solid #dfdfdc;
   border-bottom: 5px solid #dfdfdc;
+  padding-bottom: 10px;
   height: 100%;
   width: 100%;
-  margin: 5px;
 }
 
-.text-stimulus {
+.operation-span-stim-array {
+  display: grid;
+  grid-area: stimulus-display;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-row-gap: 2vh;
+  place-items: center;
+  border-top: 5px solid #dfdfdc;
+  border-bottom: 5px solid #dfdfdc;
+  padding-bottom: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.operation-span-array-item {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "index img";
+  place-items: center;
+  margin: 5px;
+  width: 100%;
+  height: 100%;
+}
+
+.operation-span-array-item-index {
+  grid-area: index;
+  width: 100%;
+  height: 100%;
+}
+
+.operation-span-array-item-image {
+  grid-area: img;
+  width: 100%;
+  height: 100%;
+}
+
+.text-stim {
   font-size: 30pt;
   place-self: center;
   line-height: 0.5em;
 }
 
-.image-stimulus {
+.image-stim {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-}
-
-.operation-span-recall-stimuli {
-  display: grid;
-  grid-area: stimulus-display;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  justify-content: center;
-  align-content: center;
 }
 
 .operation-span-recall-bank {

@@ -19,6 +19,7 @@
     <script src="plugins/present-image.js"></script>
     <script src="plugins/present-unsolved-equation.js"></script>
     <script src="plugins/present-solution.js"></script>
+    <script src="plugins/present-recall-screen.js"></script>
     <script src="utilities.js"></script>
     <link rel="stylesheet" href="css/jspsych.css">
     <link rel="stylesheet" href="css/operation-span.css">
@@ -28,10 +29,26 @@
 
 <script>
 
+    var dummy_imgs = [
+    	'materials/images/dev_set/F.png',
+	    'materials/images/dev_set/H.png',
+	    'materials/images/dev_set/J.png',
+	    'materials/images/dev_set/K.png',
+	    'materials/images/dev_set/L.png',
+	    'materials/images/dev_set/N.png',
+	    'materials/images/dev_set/P.png',
+	    'materials/images/dev_set/Q.png',
+	    'materials/images/dev_set/R.png',
+	    'materials/images/dev_set/S.png',
+	    'materials/images/dev_set/T.png',
+	    'materials/images/dev_set/Y.png',
+    ]
+
     var trial= {
         type: 'present-image',
-        image: "materials/images/dev_set/oh_deer.png",
+        image: "materials/images/dev_set/F.png",
         index: "1",
+        prompt: 'REMEMBER',
         image_duration: 5000,
         trial_duration: 5500
     }
@@ -39,11 +56,14 @@
     var trial2 = {
         type: 'present-unsolved-equation',
         expression: '(3 * 4)',
+        prompt: "Press continue when you know the answer.",
+        button_label: 'continue',
         add_term: true
     }
 
     var trial3 = {
         type: 'present-solution',
+        prompt: 'Is this the correct answer?',
         equation: function() {
             return jsPsych.data.get().last(1).values()[0].equation;
         },
@@ -52,8 +72,14 @@
         }
     }
 
+    var trial4 = {
+    	type: 'present-recall-screen',
+        image_array: dummy_imgs
+    }
+
     jsPsych.init({
-        timeline: [trial, trial2, trial3],
+        timeline: [trial, trial2, trial3, trial4],
+        preload_images: dummy_imgs,
         on_finish: function() {
             jsPsych.data.displayData();
         }

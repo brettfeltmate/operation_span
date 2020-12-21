@@ -29,7 +29,12 @@ jsPsych.plugins['present-image'] = (function() {
                 default: null,
                 description: 'An optional index value denoting images serial presentation position.'
             },
-
+            prompt: {
+                type: jsPsych.plugins.parameterType.STRING,
+                pretty_name: "Prompt",
+                default: "",
+                description: "Any content here will be displayed above the presented image."
+            },
             image_duration: {
                 type: jsPsych.plugins.parameterType.INT,
                 pretty_name: "image duration",
@@ -53,15 +58,22 @@ jsPsych.plugins['present-image'] = (function() {
 
         $('#jspsych-loading-progress-bar-container').remove();
 
-        event_display =
-            `<div class = 'operation-span-content-wrapper'>` +
-            `<div class = 'operation-span-content-layout'>` +
-            `<div class = 'text-stimulus' style = 'grid-area: prompt'>REMEMBER</div>` +
-            `<div class = 'operation-span-single-stimulus image-stimulus' style="background-image: url('${trial.image}')">` +
-            //`<div class = 'operation-span-content-box' style="background-image: url('${trial.image}')"></div>` +
-            `</div></div></div>`
+        let prompt = $('<div />').addClass('text-stim').css('grid-area', 'prompt').text(`${trial.prompt}`)
+        let stim = $('<div />').addClass('operation-span-single-stim image-stim').css('background-image', `url('${trial.image}')`)
 
-        display_element.innerHTML = event_display;
+        $(display_element).append(
+            $('<div />').addClass('operation-span-layout').append([prompt, stim])
+        )
+        //
+        // event_display =
+        //     `<div class = 'operation-span-layout'>` +
+        //     `<div class = 'text-stim' style = 'grid-area: prompt'>${trial.prompt}</div>` +
+        //     `<div class = 'operation-span-single-stim image-stim' style="background-image: url('${trial.image}')"></div>` +
+        //     `</div>`
+        //
+        //
+        //
+        // display_element.innerHTML = event_display;
 
         // function to end trial when it is time
         function end_trial() {

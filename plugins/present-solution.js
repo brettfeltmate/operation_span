@@ -32,8 +32,8 @@ jsPsych.plugins["present-solution"] = (function() {
             prompt: {
               type: jsPsych.plugins.parameterType.STRING,
               pretty_name: "Prompt",
-              default: null,
-              description: "Any content here will be displayed over presented solution."
+              default: "",
+              description: "Any content here will be displayed above the presented solution."
             },
             trial_duration: {
                 type: jsPsych.plugins.parameterType.INT,
@@ -73,24 +73,22 @@ jsPsych.plugins["present-solution"] = (function() {
 
     plugin.trial = function(display_element, trial) {
 
-        let prompt = (trial.prompt !== null) ? trial.prompt : "Is this the correct answer?"
-
         var solution_valid = randomChoice([true, false]); // TODO: The plugin should not decide this.
-        var proposed_solution = plugin.get_solution(trial.equation, solution_valid);
+        var to_present = plugin.get_solution(trial.equation, solution_valid);
 
-        event_display =
-            `<div class = 'operation-span-content-wrapper'>` +
-            `<div class = 'operation-span-content-layout'>` +
-            `<div class = 'text-stimulus' style = 'grid-area: prompt'>${prompt}</div>` +
-            `<div class = 'operation-span-single-stimulus text-stimulus'>${proposed_solution}</div>` +
-            `<div class = 'operation-span-button-bank'>` +
-            `<button class = 'operation-span-button'>${trial.button_labels[0]}</button>` +
-            `<button class = 'operation-span-button'>${trial.button_labels[1]}</button>` +
-            `</div></div></div>`
+        let prompt = $('<div />').addClass('text-stim').css('grid-area', 'prompt').text(`${trial.prompt}`)
+        let stim = $('<div />').addClass('operation-span-single-stim text-stim').text(`${to_present}`)
+        let buttons =  $('<div />').addClass('operation-span-button-bank')
 
+        for (let i=0; i < trial.button_labels.length; i++) {
+            $(buttons).append(
+                $('<button />').addClass('operation-span-button').text(`${trial.button_labels[i]}`)
+            )
+        }
 
-
-        display_element.innerHTML = event_display;
+        $(display_element).append(
+            $('<div />').addClass('operation-span-layout').append([prompt, stim, buttons])
+        )
 
         // Start the clock
         var start_time = performance.now();
@@ -156,7 +154,7 @@ jsPsych.plugins["present-solution"] = (function() {
             var trial_data = {
                 "rt": response.rt,
                 "solve_time": response.solve_time,
-                "solution_presented": proposed_solution,
+                "solution_presented": to_present,
                 "solution_correct": solution_valid,
                 "response": response.choice,
                 "accuracy": response.accuracy
