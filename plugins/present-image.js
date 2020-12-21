@@ -59,7 +59,11 @@ jsPsych.plugins['present-image'] = (function() {
         $('#jspsych-loading-progress-bar-container').remove();
 
         let prompt = $('<div />').addClass('text-stim').css('grid-area', 'prompt').text(`${trial.prompt}`)
-        let stim = $('<div />').addClass('operation-span-single-stim image-stim').css('background-image', `url('${trial.image}')`)
+        let stim = $('<div />').addClass('operation-span-single-stim')
+        $(stim).append(
+            $('<div />').addClass('image-stim').css('background-image', `url('${trial.image}')`)
+        )
+        //let button_bank =  $('<div />').addClass('operation-span-button-bank')
 
         let container = $('<div />').addClass('operation-span-layout').append([prompt, stim])
 
